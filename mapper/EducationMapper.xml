@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.recruit.mapper.EducationMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.recruit.model.EducationDO">
+        <id column="id" property="id" />
+        <result column="resume_id" property="resumeId" />
+        <result column="name" property="name" />
+        <result column="major" property="major" />
+        <result column="diploma" property="diploma" />
+        <result column="descriptions" property="descriptions" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+    </resultMap>
+
+    <!-- 获取所有不重复的专业名称 -->
+    <select id="getAllMajors" resultType="java.lang.String">
+        SELECT DISTINCT major
+        FROM education
+        WHERE major IS NOT NULL
+        AND major != ''
+    </select>
+</mapper> 

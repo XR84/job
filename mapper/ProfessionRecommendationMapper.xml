@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.recruit.mapper.ProfessionRecommendationMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.recruit.model.ProfessionRecommendationDO">
+        <id column="id" property="id" />
+        <result column="priority" property="priority" />
+        <result column="jobId" property="jobId" />
+        <result column="major" property="major" />
+        <result column="recommendation_percentage" property="recommendationPercentage" />
+        <result column="jobTitle" property="jobTitle" />
+        <result column="recommendation_reason" property="recommendationReason" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, priority, jobId, major, recommendationPercentage, jobTitle, recommendationReason
+    </sql>
+
+    <!-- 根据职位ID查询推荐列表 -->
+    <select id="selectByJobId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM professionRecommendation
+        WHERE jobId = #{jobId}
+        ORDER BY priority ASC
+    </select>
+
+    <!-- 根据专业名称查询推荐列表 -->
+    <select id="selectByMajor" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM professionRecommendation
+        WHERE major = #{major}
+        ORDER BY priority ASC
+    </select>
+
+    <!-- 批量插入推荐数据 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO professionRecommendation
+        (priority, jobId, major, recommendationPercentage, jobTitle, recommendationReason)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.priority}, #{item.jobId}, #{item.major}, #{item.recommendationPercentage},
+            #{item.jobTitle}, #{item.recommendationReason})
+        </foreach>
+    </insert>
+
+    <!-- 根据职位ID删除推荐数据 -->
+    <delete id="deleteByJobId">
+        DELETE FROM professionRecommendation
+        WHERE jobId = #{jobId}
+    </delete>
+    <delete id="delete">
+        DELETE FROM professionRecommendation
+    </delete>
+
+    <!-- 更新推荐原因 -->
+    <update id="updateRecommendationReason">
+        UPDATE professionRecommendation
+        SET recommendationReason = #{recommendationReason}
+        WHERE id = #{id}
+    </update>
+
+</mapper> 
